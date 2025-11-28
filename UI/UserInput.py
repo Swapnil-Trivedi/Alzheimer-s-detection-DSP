@@ -23,7 +23,7 @@ def render_user_input_page():
         col1, col2 = st.columns(2)
 
         with col1:
-            age = st.number_input("Age", min_value=60, max_value=90, step=1)
+            age = st.number_input("Age", min_value=18, max_value=90, step=1)
 
         with col2:
             gender = st.radio("Gender", ["Male", "Female"], horizontal=True)

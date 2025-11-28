@@ -17,8 +17,7 @@ def render_pattern_game():
     5. Score = number of rounds successfully completed.
     """)
 
-    if st.button("▶️ Start Game"):
-
+    if st.button("▶️ Start Game", key="start_pattern"):
         html_game = """
         <!DOCTYPE html>
         <html>
@@ -81,6 +80,7 @@ def render_pattern_game():
                 const tab = document.getElementById("tab"+id);
                 tab.innerText = nums[i];
                 tab.style.pointerEvents = "none"; // disable clicks during timer
+                tab.setAttribute("data-num", nums[i]);
             });
 
             let countdown = 5;
@@ -93,10 +93,9 @@ def render_pattern_game():
                 } else {
                     clearInterval(timerInterval);
                     timerDiv.innerText = "Now click in ascending order!";
-                    // hide numbers
                     tabs.forEach((id)=>{
                         document.getElementById("tab"+id).innerText = "";
-                        document.getElementById("tab"+id).style.pointerEvents = "auto"; // enable clicks
+                        document.getElementById("tab"+id).style.pointerEvents = "auto";
                     });
                 }
             },1000);
@@ -106,24 +105,11 @@ def render_pattern_game():
             if(gameEnded) return;
             gameEnded = true;
 
-            document.getElementById("result").innerHTML = "<h2>Game Over! Rounds completed: "+(round-1)+"</h2>";
-            window.parent.postMessage({func:'setScore', value:round-1, game:'MemoryPattern'}, '*');
-
-            const btnContainer = document.createElement("div");
-            btnContainer.style.marginTop = "20px";
-
-            const homeBtn = document.createElement("button");
-            homeBtn.innerText = "🏠 Home";
-            homeBtn.onclick = () => { window.location.href = "/" };
-
-            const nextBtn = document.createElement("button");
-            nextBtn.innerText = "➡️ Next Game";
-            nextBtn.style.marginLeft = "10px";
-            nextBtn.onclick = () => { window.location.href = "/pages/Game4.py" };
-
-            btnContainer.appendChild(homeBtn);
-            btnContainer.appendChild(nextBtn);
-            document.body.appendChild(btnContainer);
+            const roundsCompleted = round-1;
+            document.getElementById("result").innerHTML = "<h2>Game Over! Rounds completed: "+roundsCompleted+"</h2>";
+            
+            // Send score to Streamlit
+            window.parent.postMessage({func:'setScore', value:roundsCompleted, game:'MemoryPattern'}, '*');
 
             tabs.forEach((id)=>{
                 document.getElementById("tab"+id).style.pointerEvents = "none";
@@ -133,10 +119,8 @@ def render_pattern_game():
         tabs.forEach((id)=>{
             document.getElementById("tab"+id).addEventListener("click", ()=>{
                 if(gameEnded) return;
-
-                const clickedNumber = parseInt(document.getElementById("tab"+id).getAttribute("data-num") || expectedOrder[0]);
-                const tabElement = document.getElementById("tab"+id);
-                tabElement.setAttribute("data-num", expectedOrder[0]); // store correct number
+                const tabEl = document.getElementById("tab"+id);
+                const clickedNumber = parseInt(tabEl.getAttribute("data-num"));
                 if(clickedNumber !== expectedOrder.shift()){
                     endGame();
                 } else if(expectedOrder.length===0){
@@ -151,3 +135,9 @@ def render_pattern_game():
         </html>
         """
         components.html(html_game, height=600, scrolling=False)
+
+    # Capture score from JS via query params and store in session_state
+    if "pattern_score" in st.session_state.get("query_params", {}):
+        score = st.session_state.query_params["pattern_score"][0]
+        st.session_state["game_scores"]["Pattern"] = float(score)
+        st.success(f"Your Pattern Game score: {score}")
