@@ -10,7 +10,7 @@ from UI.Game_Memory import render_memory_game
 from UI.ReactionGame import render_reaction_game
 from UI.TaskSwitchingGame import  render_task_switching_game
 from UI.PatternGame import render_pattern_game
-# from UI.Results import render_results_page
+from UI.ResultsPage import render_results_page
 
 # -------------------------
 # Initialize Session State
@@ -59,8 +59,8 @@ elif page == "Task Switching Game":
 elif page == "Pattern Game":
     render_pattern_game()
 
-# elif page == "Results":
-#     render_results_page()
+elif page == "Results":
+    render_results_page()
 
 # -------------------------
 # Optional: Footer for all pages
