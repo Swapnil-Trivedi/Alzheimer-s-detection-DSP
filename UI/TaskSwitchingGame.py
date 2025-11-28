@@ -19,8 +19,7 @@ def render_task_switching_game():
     5. Score = number of correct responses.
     """)
 
-    if st.button("▶️ Start Game"):
-
+    if st.button("▶️ Start Game", key="start_taskswitch"):
         html_game = """
         <!DOCTYPE html>
         <html>
@@ -30,8 +29,8 @@ def render_task_switching_game():
         <style>
             body { font-family:sans-serif; text-align:center; background-color:#f5f5f5; }
             #stimulus { font-size:72px; font-weight:bold; margin-top:50px; padding:50px; border-radius:20px; display:inline-block; cursor:pointer; user-select:none; }
-            #score { font-size:24px; font-weight:bold; margin-top:20px; }
-            #timer { font-size:20px; margin-top:10px; font-weight:bold; }
+            #score { font-size:28px; font-weight:bold; margin-top:20px; }
+            #timer { font-size:24px; margin-top:10px; font-weight:bold; }
             #result h2 { color:#0a0; font-weight:bold; margin-top:20px; }
             button { font-size:20px; margin:5px; padding:5px 10px; }
         </style>
@@ -101,7 +100,6 @@ def render_task_switching_game():
             showStimulus();
         });
 
-        // Countdown timer
         const timerInterval = setInterval(()=>{
             timeLeft--;
             timerEl.innerText = "Time Left: " + timeLeft + "s";
@@ -115,31 +113,22 @@ def render_task_switching_game():
             if(gameEnded) return;
             gameEnded = true;
             resultEl.innerHTML = "<h2>Game Over! Your Score: "+score+"</h2>";
-            window.parent.postMessage({func:'setScore', value:score, game:'TaskSwitching'}, '*');
 
-            const btnContainer = document.createElement("div");
-            btnContainer.style.marginTop = "20px";
-
-            const homeBtn = document.createElement("button");
-            homeBtn.innerText = "🏠 Home";
-            homeBtn.onclick = () => { window.location.href = "/" };
-
-            const nextBtn = document.createElement("button");
-            nextBtn.innerText = "➡️ Next Game";
-            nextBtn.style.marginLeft = "10px";
-            nextBtn.onclick = () => { window.location.href = "/pages/Game5.py" };
-
-            btnContainer.appendChild(homeBtn);
-            btnContainer.appendChild(nextBtn);
-            document.body.appendChild(btnContainer);
+            // Send score to Streamlit via query params
+            window.parent.postMessage({func:'setScore', game:'TaskSwitching', value:score}, '*');
 
             stimulusEl.style.pointerEvents = "none";
         }
 
-        // Start first stimulus
         showStimulus();
         </script>
         </body>
         </html>
         """
         components.html(html_game, height=600, scrolling=False)
+
+    # Capture score from JS via query params and save to session state
+    if "taskswitch_score" in st.session_state.get("query_params", {}):
+        score = st.session_state.query_params["taskswitch_score"]
+        st.session_state["game_scores"]["TaskSwitch"] = float(score)
+        st.success(f"Your Task Switching score: {score}")
