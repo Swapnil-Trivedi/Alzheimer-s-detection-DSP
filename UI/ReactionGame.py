@@ -15,69 +15,101 @@ def render_reaction_game():
     3. The game lasts 30 seconds. Try to get as many points as possible!  
     """)
 
-    if st.button("▶️ Start Game",key="reaction_start"):
+    # Start button with a unique key
+    if st.button("▶️ Start Game", key="start_reaction"):
         html_game = """
-        <div id="game-container" style="text-align:center; background-color:#fff; padding:20px; border-radius:10px;">
-            <h2>⚡ Quick Tap Challenge</h2>
-            <div id="timer">30</div>
-            <div id="score">Score: 0</div>
-            <div id="game-area" style="width:400px;height:400px;margin:20px auto;position:relative;background:#f0f0f0;border-radius:20px;"></div>
-            <div id="result" style="margin-top:20px;"></div>
-        </div>
+        <!DOCTYPE html>
+        <html>
+        <head>
+          <meta charset="UTF-8">
+          <title>Quick Tap Challenge</title>
+          <style>
+            body { 
+              font-family: sans-serif; 
+              text-align:center; 
+              background-color: #fff; 
+              color: #000; 
+            }
+            #game-area { 
+              width: 400px; 
+              height: 400px; 
+              margin: 20px auto; 
+              position: relative; 
+              background-color: #f0f0f0; 
+              border-radius: 20px; 
+            }
+            .square { 
+              width: 80px; 
+              height: 80px; 
+              position: absolute; 
+              cursor: pointer; 
+              border-radius: 10px; 
+              background-color: #ff4444; 
+            }
+            #timer, #score { 
+              font-size: 36px;  /* increased font size */
+              font-weight: bold; 
+              margin-top: 10px; 
+            }
+            #result h2 { color: #0f0; font-weight: bold; }
+            button { font-size: 20px; margin: 5px; padding: 5px 10px; }
+          </style>
+        </head>
+        <body>
+          <h1>⚡ Quick Tap Challenge</h1>
+          <div id="timer">30</div>
+          <div id="score">Score: 0</div>
+          <div id="game-area"></div>
+          <div id="result"></div>
 
-        <script>
+          <script>
             const gameArea = document.getElementById("game-area");
             let score = 0;
             let time = 30;
 
             function randomPosition() {
-                const x = Math.random() * (gameArea.clientWidth - 80);
-                const y = Math.random() * (gameArea.clientHeight - 80);
-                return {x, y};
+              const x = Math.random() * (gameArea.clientWidth - 80);
+              const y = Math.random() * (gameArea.clientHeight - 80);
+              return {x, y};
             }
 
             function spawnSquare() {
-                const square = document.createElement("div");
-                square.className = "square";
-                square.style.width = "80px";
-                square.style.height = "80px";
-                square.style.position = "absolute";
-                square.style.borderRadius = "10px";
-                square.style.backgroundColor = "#ff4444";
-                square.style.cursor = "pointer";
-                const pos = randomPosition();
-                square.style.left = pos.x + "px";
-                square.style.top = pos.y + "px";
+              const square = document.createElement("div");
+              square.className = "square";
+              square.style.left = randomPosition().x + "px";
+              square.style.top = randomPosition().y + "px";
 
-                square.onclick = () => {
-                    score++;
-                    document.getElementById("score").innerText = "Score: " + score;
-                    gameArea.removeChild(square);
-                    spawnSquare();
-                };
+              square.onclick = () => {
+                score++;
+                document.getElementById("score").innerText = "Score: " + score;
+                gameArea.removeChild(square);
+                spawnSquare(); // spawn next square
+              };
 
-                gameArea.appendChild(square);
+              gameArea.appendChild(square);
             }
 
-            spawnSquare();
+            spawnSquare(); // first square
 
             const timerInterval = setInterval(() => {
-                time--;
-                document.getElementById("timer").innerText = time;
-                if (time <= 0) {
-                    clearInterval(timerInterval);
-                    endGame();
-                }
+              time--;
+              document.getElementById("timer").innerText = time;
+              if (time <= 0) {
+                clearInterval(timerInterval);
+                endGame();
+              }
             }, 1000);
 
             function endGame() {
-                gameArea.innerHTML = "";
-                document.getElementById("result").innerHTML = "<h2>Game Over! Score: " + score + "</h2>";
+              gameArea.innerHTML = "";
+              document.getElementById("result").innerHTML = "<h2>Game Over! Score: " + score + "</h2>";
 
-                // Normalize score (max possible clicks can vary, let's assume 50 clicks as a reference)
-                const normScore = Math.min(score / 50, 1.0);
-                window.parent.postMessage({func:'setScore', value:normScore, game:'Reaction'}, '*');
+              // Store normalized score in Streamlit session_state
+              const normScore = score / 50;  // adjust max clicks as needed
+              window.parent.postMessage({func:'setScore', game:'Reaction', value:normScore}, '*');
             }
-        </script>
+          </script>
+        </body>
+        </html>
         """
         components.html(html_game, height=700, scrolling=False)
