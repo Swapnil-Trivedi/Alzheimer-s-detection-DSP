@@ -35,10 +35,9 @@ def render_memory_game():
         let firstCard = null;
         let secondCard = null;
         let matches = 0;
-        let memTime = 5;  // 5-second memorization
-        let gameTime = 30; // 30-second game
+        let memTime = 5;
+        let gameTime = 30;
 
-        // Create card elements
         function createGrid() {
             grid.innerHTML = "";
             cards.forEach(symbol => {
@@ -55,20 +54,18 @@ def render_memory_game():
                 card.style.color = "#000";
                 card.style.borderRadius = "10px";
                 card.style.cursor = "pointer";
-                card.innerHTML = symbol; // show for memorization
+                card.innerHTML = symbol;
                 grid.appendChild(card);
             });
         }
 
         createGrid();
 
-        // Memorization countdown
         let memInterval = setInterval(() => {
             document.getElementById("timer").innerText = "Memorize: " + memTime + "s";
             memTime--;
             if(memTime < 0){
                 clearInterval(memInterval);
-                // hide all cards
                 document.querySelectorAll(".card").forEach(c => c.innerHTML = "❓");
                 startGame();
             }
@@ -120,3 +117,11 @@ def render_memory_game():
         </script>
         """
         components.html(html_game, height=750, scrolling=False)
+
+    # -------------------------
+    # Capture score from JS via Streamlit query params
+    # -------------------------
+    if "memory_score" in st.query_params:
+        score = float(st.query_params["memory_score"][0])
+        st.session_state["game_scores"]["Memory"] = score
+        st.success(f"Your Memory Game score: {score*100:.1f} points!")
