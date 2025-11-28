@@ -108,3 +108,4 @@ def render_user_input_page():
             }
 
             st.success("Your information has been saved. You may now proceed to the cognitive games using the tabs above.")
+            print(st.session_state.user_data)
