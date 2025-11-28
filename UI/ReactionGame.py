@@ -15,7 +15,7 @@ def render_reaction_game():
     3. The game lasts 30 seconds. Try to get as many points as possible!  
     """)
 
-    # Start button with a unique key
+    # Start button
     if st.button("▶️ Start Game", key="start_reaction"):
         html_game = """
         <!DOCTYPE html>
@@ -24,33 +24,10 @@ def render_reaction_game():
           <meta charset="UTF-8">
           <title>Quick Tap Challenge</title>
           <style>
-            body { 
-              font-family: sans-serif; 
-              text-align:center; 
-              background-color: #fff; 
-              color: #000; 
-            }
-            #game-area { 
-              width: 400px; 
-              height: 400px; 
-              margin: 20px auto; 
-              position: relative; 
-              background-color: #f0f0f0; 
-              border-radius: 20px; 
-            }
-            .square { 
-              width: 80px; 
-              height: 80px; 
-              position: absolute; 
-              cursor: pointer; 
-              border-radius: 10px; 
-              background-color: #ff4444; 
-            }
-            #timer, #score { 
-              font-size: 36px;  /* increased font size */
-              font-weight: bold; 
-              margin-top: 10px; 
-            }
+            body { font-family: sans-serif; text-align:center; background-color: #fff; color: #000; }
+            #game-area { width: 400px; height: 400px; margin: 20px auto; position: relative; background-color: #f0f0f0; border-radius: 20px; }
+            .square { width: 80px; height: 80px; position: absolute; cursor: pointer; border-radius: 10px; background-color: #ff4444; }
+            #timer, #score { font-size: 36px; font-weight: bold; margin-top: 10px; }
             #result h2 { color: #0f0; font-weight: bold; }
             button { font-size: 20px; margin: 5px; padding: 5px 10px; }
           </style>
@@ -83,13 +60,13 @@ def render_reaction_game():
                 score++;
                 document.getElementById("score").innerText = "Score: " + score;
                 gameArea.removeChild(square);
-                spawnSquare(); // spawn next square
+                spawnSquare();
               };
 
               gameArea.appendChild(square);
             }
 
-            spawnSquare(); // first square
+            spawnSquare();
 
             const timerInterval = setInterval(() => {
               time--;
@@ -104,12 +81,23 @@ def render_reaction_game():
               gameArea.innerHTML = "";
               document.getElementById("result").innerHTML = "<h2>Game Over! Score: " + score + "</h2>";
 
-              // Store normalized score in Streamlit session_state
-              const normScore = score / 50;  // adjust max clicks as needed
-              window.parent.postMessage({func:'setScore', game:'Reaction', value:normScore}, '*');
+              // Store score in query params so Streamlit can read it
+              const normScore = score / 50; // adjust max clicks
+              const url = new URL(window.location.href);
+              url.searchParams.set("reaction_score", normScore);
+              window.history.replaceState({}, '', url);
             }
           </script>
         </body>
         </html>
         """
         components.html(html_game, height=700, scrolling=False)
+
+    # Capture score from query params and store in session state
+    if "reaction_score" in st.query_params:
+        try:
+            score = float(st.query_params["reaction_score"][0])
+            st.session_state["game_scores"]["Reaction"] = score
+            st.success(f"Your Reaction Game score: {score*100:.1f} points!")
+        except ValueError:
+            pass

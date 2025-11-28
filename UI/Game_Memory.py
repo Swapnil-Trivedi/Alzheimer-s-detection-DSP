@@ -18,7 +18,7 @@ def render_memory_game():
     """)
 
     # Start button
-    if st.button("▶️ Start Game"):
+    if st.button("▶️ Start Game", key="start_memory"):
         html_game = """
         <div id="game-container" style="text-align:center; background-color:#fff; padding:20px; border-radius:10px;">
             <h2>🧩 Memory Match</h2>
@@ -112,16 +112,19 @@ def render_memory_game():
         function endGame(){
             document.getElementById("result").innerHTML = "<h3>Game Over! You matched " + matches + " pairs.</h3>";
             const normScore = matches / 8;
-            window.parent.postMessage({func:'setScore', game:'Memory', value:normScore}, '*');
+            const url = new URL(window.location.href);
+            url.searchParams.set("memory_score", normScore);
+            window.history.replaceState({}, '', url);
         }
         </script>
         """
         components.html(html_game, height=750, scrolling=False)
 
-    # -------------------------
-    # Capture score from JS via Streamlit query params
-    # -------------------------
+    # Capture score from query params and store in session state
     if "memory_score" in st.query_params:
-        score = float(st.query_params["memory_score"][0])
-        st.session_state["game_scores"]["Memory"] = score
-        st.success(f"Your Memory Game score: {score*100:.1f} points!")
+        try:
+            score = float(st.query_params["memory_score"][0])
+            st.session_state["game_scores"]["Memory"] = score
+            st.success(f"Your Memory Game score: {score*100:.1f} points!")
+        except ValueError:
+            pass
