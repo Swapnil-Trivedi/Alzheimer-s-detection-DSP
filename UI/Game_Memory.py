@@ -121,10 +121,13 @@ def render_memory_game():
         components.html(html_game, height=750, scrolling=False)
 
     # Capture score from query params and store in session state
-    if "memory_score" in st.query_params:
-        try:
-            score = float(st.query_params["memory_score"][0])
-            st.session_state["game_scores"]["Memory"] = score
-            st.success(f"Your Memory Game score: {score*100:.1f} points!")
-        except ValueError:
-            pass
+    st.subheader("Enter Your Score Manually")
+
+    memory_input = st.number_input(
+        "How many pairs did you match? (0–8)",
+        min_value=0, max_value=8, step=1
+    )
+
+    if st.button("Save Memory Score"):
+        st.session_state["game_scores"]["Memory"] = int(memory_input)
+        st.success(f"Memory Game score saved: {memory_input} pairs!")

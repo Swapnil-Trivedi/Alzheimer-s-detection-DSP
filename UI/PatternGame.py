@@ -137,7 +137,15 @@ def render_pattern_game():
         components.html(html_game, height=600, scrolling=False)
 
     # Capture score from JS via query params and store in session_state
-    if "pattern_score" in st.session_state.get("query_params", {}):
-        score = st.session_state.query_params["pattern_score"][0]
-        st.session_state["game_scores"]["Pattern"] = float(score)
-        st.success(f"Your Pattern Game score: {score}")
+    st.subheader("Enter Your Score Manually")
+
+    score_input = st.number_input(
+        "How many rounds did you complete?",
+        min_value=0,
+        max_value=20,
+        step=1
+    )
+
+    if st.button("Save Pattern Game Score"):
+        st.session_state["game_scores"]["Pattern"] = int(score_input)
+        st.success(f"Pattern Switching score saved: {score_input} rounds completed!")

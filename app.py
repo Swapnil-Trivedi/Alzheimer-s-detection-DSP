@@ -1,69 +1,82 @@
 import streamlit as st
-
-# -------------------------
-# Import all page render functions
-# -------------------------
 from UI.Landing import render_landing_page
 from UI.UserInput import render_user_input_page
 from UI.AboutGames import render_about_games_page
 from UI.Game_Memory import render_memory_game
 from UI.ReactionGame import render_reaction_game
-from UI.TaskSwitchingGame import  render_task_switching_game
+from UI.TaskSwitchingGame import render_task_switching_game
 from UI.PatternGame import render_pattern_game
 from UI.ResultsPage import render_results_page
+import streamlit.components.v1 as components
 
-# -------------------------
-# Initialize Session State
-# -------------------------
-if "page" not in st.session_state:
-    st.session_state.page = "Home"  # default landing page
+# ---------------------------------------------
+# Session State Initialization
+# ---------------------------------------------
+def init_session_state():
+    if "user_data" not in st.session_state:
+        st.session_state.user_data = {}
 
-# Optional: store user data and game scores in session state
-if "user_data" not in st.session_state:
-    st.session_state.user_data = {}
+    if "game_scores" not in st.session_state:
+        st.session_state.game_scores = {
+            "Memory": 0,
+            "Reaction": 0,
+            "TaskSwitch": 0,
+            "Pattern": 0
+        }
 
-if "game_scores" not in st.session_state:
-    st.session_state.game_scores = {
-        "Memory": 0,
-        "Reaction": 0,
-        "TaskSwitch": 0,
-        "Pattern": 0
-    }
+    if "model_output" not in st.session_state:
+        st.session_state.model_output = None
 
-# -------------------------
-# Router Logic
-# -------------------------
-page = st.session_state.page
+init_session_state()
 
-if page == "Home":
+# ---------------------------------------------
+# Page Layout
+# ---------------------------------------------
+st.set_page_config(
+    page_title="Alzheimer's Cognitive Assessment",
+    layout="wide",
+)
+
+st.title("🧠 Alzheimer’s Cognitive Assessment Dashboard")
+st.write(
+    "Welcome! Navigate through each step to complete the assessment, "
+    "play cognitive games, and view your AI-powered results."
+)
+
+
+# ---------------------------------------------
+# Main Navigation Tabs
+# ---------------------------------------------
+tabs = st.tabs([
+    "🏠 Home",
+    "👤 User Information",
+    "🎮 About the Games",
+    "🧩 Memory",
+    "⚡ Reaction",
+    "🔄 Task Switching",
+    "🔢 Pattern Game",
+    "📊 Results"
+])
+
+with tabs[0]:
     render_landing_page()
-
-elif page == "User Input":
+with tabs[1]:
     render_user_input_page()
-
-elif page == "About the Games":
+with tabs[2]:
     render_about_games_page()
-
-# -------------------------
-# Uncomment and implement these as you create the games
-# -------------------------
-elif page == "Memory Game":
+with tabs[3]:
     render_memory_game()
-
-elif page == "Reaction Game":
+with tabs[4]:
     render_reaction_game()
-
-elif page == "Task Switching Game":
+with tabs[5]:
     render_task_switching_game()
-
-elif page == "Pattern Game":
+with tabs[6]:
     render_pattern_game()
-
-elif page == "Results":
+with tabs[7]:
     render_results_page()
 
-# -------------------------
-# Optional: Footer for all pages
-# -------------------------
+# ---------------------------------------------
+# Global Footer
+# ---------------------------------------------
 st.markdown("---")
-st.caption("Alzheimer’s Risk Assessment Tool – Educational & Demonstration Purposes Only")
+st.caption("Alzheimer’s Risk Assessment Tool – Educational Use Only")

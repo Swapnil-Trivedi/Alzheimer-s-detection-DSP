@@ -93,11 +93,25 @@ def render_reaction_game():
         """
         components.html(html_game, height=700, scrolling=False)
 
-    # Capture score from query params and store in session state
-    if "reaction_score" in st.query_params:
-        try:
-            score = float(st.query_params["reaction_score"][0])
-            st.session_state["game_scores"]["Reaction"] = score
-            st.success(f"Your Reaction Game score: {score*100:.1f} points!")
-        except ValueError:
-            pass
+    st.divider()
+
+    st.subheader("📝 Enter Your Score")
+
+    score = st.number_input(
+        "Enter your reaction game score (number of taps):",
+        min_value=0,
+        max_value=200,
+        step=1,
+        key="manual_reaction_score"
+    )
+
+    if st.button("Save Score"):
+        st.session_state["game_scores"]["Reaction"] = score
+        st.success(f"✅ Reaction Game score saved: **{score}** points!")
+
+    st.divider()
+
+    # Display saved score if exists
+    if "Reaction" in st.session_state["game_scores"]:
+        saved = st.session_state["game_scores"]["Reaction"]
+        st.info(f"📌 Current saved Reaction score: **{saved}**")

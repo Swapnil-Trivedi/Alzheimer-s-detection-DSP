@@ -128,7 +128,15 @@ def render_task_switching_game():
         components.html(html_game, height=600, scrolling=False)
 
     # Capture score from JS via query params and save to session state
-    if "taskswitch_score" in st.session_state.get("query_params", {}):
-        score = st.session_state.query_params["taskswitch_score"]
-        st.session_state["game_scores"]["TaskSwitch"] = float(score)
-        st.success(f"Your Task Switching score: {score}")
+    st.subheader("Enter Your Score Manually")
+
+    score_input = st.number_input(
+        "How many correct responses did you get?",
+        min_value=0,
+        max_value=200,
+        step=1
+    )
+
+    if st.button("Save Task Switching Score"):
+        st.session_state["game_scores"]["TaskSwitch"] = int(score_input)
+        st.success(f"Task Switching score saved: {score_input} correct responses!")
