@@ -78,3 +78,10 @@ These conditions have known associations with increased Alzheimer’s risk.
 | Feature       | Description                                                                |
 | ------------- | -------------------------------------------------------------------------- |
 | **Diagnosis** | Alzheimer’s diagnosis (0 = No, 1 = Yes). This is the model’s target label. |
+
+## UI Samples
+![alt text](./images/image.png)
+![alt text](./images/image-1.png)
+![alt text](./images/image-2.png)
+![alt text](./images/image-3.png)
+![alt text](./images/image-4.png)
