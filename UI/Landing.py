@@ -1,19 +1,6 @@
 import streamlit as st
 
 def render_landing_page():
-    # --------------------------------
-    # Header
-    # --------------------------------
-    st.markdown(
-        """
-        <h1 style="text-align:center;">🧠 Alzheimer’s Risk Assessment</h1>
-        <h3 style="text-align:center; color:#666;">
-            Interactive Cognitive Games + Clinical Risk Factors
-        </h3>
-        """,
-        unsafe_allow_html=True
-    )
-
     st.markdown(
         """
         Welcome to the **Alzheimer’s Risk Assessment Tool** — an interactive system that blends:

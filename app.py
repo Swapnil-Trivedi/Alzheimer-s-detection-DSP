@@ -7,6 +7,7 @@ from UI.ReactionGame import render_reaction_game
 from UI.TaskSwitchingGame import render_task_switching_game
 from UI.PatternGame import render_pattern_game
 from UI.ResultsPage import render_results_page
+from UI.EdaProfileReport import render_eda_tab
 import streamlit.components.v1 as components
 
 # ---------------------------------------------
@@ -37,11 +38,23 @@ st.set_page_config(
     layout="wide",
 )
 
-st.title("🧠 Alzheimer’s Cognitive Assessment Dashboard")
-st.write(
-    "Welcome! Navigate through each step to complete the assessment, "
-    "play cognitive games, and view your AI-powered results."
-)
+# st.title("🧠 Alzheimer’s Cognitive Assessment Dashboard")
+# st.write(
+#     "Welcome! Navigate through each step to complete the assessment, "
+#     "play cognitive games, and view your AI-powered results."
+# )
+ # --------------------------------
+    # Header
+    # --------------------------------
+st.markdown(
+        """
+        <h1 style="text-align:center;">🧠 Alzheimer’s Risk Assessment</h1>
+        <h3 style="text-align:center; color:#666;">
+            Interactive Cognitive Games + Clinical Risk Factors
+        </h3>
+        """,
+        unsafe_allow_html=True
+    )
 
 
 # ---------------------------------------------
@@ -49,6 +62,7 @@ st.write(
 # ---------------------------------------------
 tabs = st.tabs([
     "🏠 Home",
+    "📊 Exploratory Data Analysis",
     "👤 User Information",
     "🎮 About the Games",
     "🧩 Memory",
@@ -61,18 +75,20 @@ tabs = st.tabs([
 with tabs[0]:
     render_landing_page()
 with tabs[1]:
-    render_user_input_page()
+    render_eda_tab()
 with tabs[2]:
-    render_about_games_page()
+    render_user_input_page()
 with tabs[3]:
-    render_memory_game()
+    render_about_games_page()
 with tabs[4]:
-    render_reaction_game()
+    render_memory_game()
 with tabs[5]:
-    render_task_switching_game()
+    render_reaction_game()
 with tabs[6]:
-    render_pattern_game()
+    render_task_switching_game()
 with tabs[7]:
+    render_pattern_game()
+with tabs[8]:
     render_results_page()
 
 # ---------------------------------------------
