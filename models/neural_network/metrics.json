@@ -1,0 +1,18 @@
+{
+    "accuracy": 0.8465116279069768,
+    "roc_auc": 0.8998722074971602,
+    "confusion_matrix": [
+        [
+            247,
+            31
+        ],
+        [
+            35,
+            117
+        ]
+    ],
+    "final_train_loss": 0.2668225258864738,
+    "final_val_loss": 0.38078984511750086,
+    "best_val_loss": 0.37515111161129816,
+    "epochs_trained": 22
+}
