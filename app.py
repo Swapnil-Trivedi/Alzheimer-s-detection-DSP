@@ -43,18 +43,19 @@ st.set_page_config(
 #     "Welcome! Navigate through each step to complete the assessment, "
 #     "play cognitive games, and view your AI-powered results."
 # )
- # --------------------------------
-    # Header
-    # --------------------------------
+
+# --------------------------------
+# Header
+# --------------------------------
 st.markdown(
-        """
-        <h1 style="text-align:center;">🧠 Alzheimer’s Risk Assessment</h1>
-        <h3 style="text-align:center; color:#666;">
-            Interactive Cognitive Games + Clinical Risk Factors
-        </h3>
-        """,
-        unsafe_allow_html=True
-    )
+    """
+    <h1 style="text-align:center;">🧠 Alzheimer's Risk Assessment</h1>
+    <h3 style="text-align:center; color:#666;">
+        Interactive Cognitive Games + Clinical Risk Factors
+    </h3>
+    """,
+    unsafe_allow_html=True
+)
 
 
 # ---------------------------------------------

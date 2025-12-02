@@ -1,0 +1,30 @@
+{
+    "model": "XGBoost",
+    "accuracy": 0.9511627906976744,
+    "train_accuracy": 0.9569517161140197,
+    "precision": 0.9455782312925171,
+    "recall": 0.9144736842105263,
+    "f1_score": 0.9297658862876255,
+    "roc_auc": 0.9433926542976145,
+    "cv_mean": 0.8365838361922842,
+    "cv_std": 0.13422696322001276,
+    "oof_accuracy": 0.8365328679464805,
+    "oof_auc": 0.9526645921171065,
+    "best_iteration": 151,
+    "parameters": {
+        "objective": "binary:logistic",
+        "eval_metric": "auc",
+        "n_estimators": 151,
+        "learning_rate": 0.015,
+        "max_depth": 10,
+        "min_child_weight": 5,
+        "subsample": 0.8,
+        "colsample_bytree": 0.8,
+        "reg_alpha": 0.05,
+        "reg_lambda": 0.05,
+        "gamma": 0.01,
+        "random_state": 42,
+        "verbosity": 0,
+        "n_jobs": -1
+    }
+}
