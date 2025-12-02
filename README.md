@@ -1,83 +1,129 @@
-# Alzheimer-s-detection-DSP
+# Alzheimer’s Disease Detection using Clinical & Cognitive Data
 
 ### Data overview
 The dataset used in this project is sourced from Kaggle and can be found at the following link 
 [Alzheimer's Dataset on Kaggle](https://www.kaggle.com/datasets/rabieelkharoua/alzheimers-disease-dataset?select=alzheimers_disease_data.csv).
 
-### Project Description
-This project focuses on the detection of Alzheimer's disease using interactive cognitive tests. The dataset contains various features related to cognitive performance, demographics, and health indicators. The goal is to build a machine learning model that can accurately classify individuals into different stages of Alzheimer's disease based on these features.
 
-### Features
-The dataset includes the following key features:
-#### Patient Information
-| Feature       | Description                                                   |
-| ------------- | ------------------------------------------------------------- |
-| **PatientID** | A unique number assigned to each patient (range: ~4751–6900). |
+## Team Members
+- **Manoj Bhausaheb Kokane** — Roll No: *(24871)*
+- **Parth Bhatia** — Roll No: *(24665)*
+- **Swapnil Trivedi** — Roll No: *(24723)*
 
-#### Demographic Details
-| Feature            | Description                                                                                                            |
-| ------------------ | ---------------------------------------------------------------------------------------------------------------------- |
-| **Age**            | Age in years (60–90). Alzheimer’s risk increases with age.                                                             |
-| **Gender**         | 0 = Male, 1 = Female.                                                                                                  |
-| **Ethnicity**      | 0 = Caucasian, 1 = African American, 2 = Asian, 3 = Other.                                                             |
-| **EducationLevel** | 0 = None, 1 = High School, 2 = Bachelor’s, 3 = Higher. Higher education is often protective against cognitive decline. |
+---
 
-#### Lifestyle Factors
-| Feature                | Description                              |
-| ---------------------- | ---------------------------------------- |
-| **BMI**                | Body Mass Index (15–40).                 |
-| **Smoking**            | 0 = No, 1 = Yes.                         |
-| **AlcoholConsumption** | Weekly alcohol intake (0–20 units).      |
-| **PhysicalActivity**   | Weekly hours of exercise (0–10).         |
-| **DietQuality**        | Score from 0–10. Higher is better.       |
-| **SleepQuality**       | Score from 4–10, indicates rest quality. |
+## 📌 Problem Statement
+Early detection of Alzheimer’s Disease (AD) is critical for timely clinical intervention, care planning, and slowing disease progression. Current diagnosis relies heavily on cognitive examinations and imaging, which are expensive, time-consuming, and not scalable for large populations.
 
-#### Medical History
-| Feature                     | Description      |
-| --------------------------- | ---------------- |
-| **FamilyHistoryAlzheimers** | 0 = No, 1 = Yes. |
-| **CardiovascularDisease**   | 0 = No, 1 = Yes. |
-| **Diabetes**                | 0 = No, 1 = Yes. |
-| **Depression**              | 0 = No, 1 = Yes. |
-| **HeadInjury**              | 0 = No, 1 = Yes. |
-| **Hypertension**            | 0 = No, 1 = Yes. |
+This project aims to build a **binary classification model** capable of distinguishing Alzheimer’s patients from healthy controls using:
+- Structured clinical data (demographics, medical history, vitals)
+- Functional and cognitive assessment scores
+- Game-based cognitive performance metrics
 
+The goal is to provide a **lightweight, interpretable, and high-accuracy screening tool** suitable for real-world clinical environments.
 
-These conditions have known associations with increased Alzheimer’s risk.
+---
 
-#### Clinical Measurements
-| Feature                      | Unit / Range  | Notes              |
-| ---------------------------- | ------------- | ------------------ |
-| **SystolicBP**               | 90–180 mmHg   |                    |
-| **DiastolicBP**              | 60–120 mmHg   |                    |
-| **CholesterolTotal**         | 150–300 mg/dL |                    |
-| **CholesterolLDL**           | 50–200 mg/dL  | "Bad cholesterol"  |
-| **CholesterolHDL**           | 20–100 mg/dL  | "Good cholesterol" |
-| **CholesterolTriglycerides** | 50–400 mg/dL  |                    |
+## 📊 Dataset Description
+The dataset consists of **2,150 patient records** with **32 features**, including:
 
+### **1. Demographics**
+- Age, gender, ethnicity
 
-#### Cognitive & Functional Assessments
-| Feature                  | Description                                                  |
-| ------------------------ | ------------------------------------------------------------ |
-| **MMSE**                 | Mini-Mental State Examination (0–30). Lower = impairment.    |
-| **FunctionalAssessment** | Score 0–10. Lower = daily functioning impairment.            |
-| **MemoryComplaints**     | 0 = No, 1 = Yes.                                             |
-| **BehavioralProblems**   | 0 = No, 1 = Yes.                                             |
-| **ADL**                  | Activities of Daily Living score (0–10). Lower = difficulty. |
+### **2. Lifestyle Factors**
+- Sleep quality, physical activity, diet metrics
 
-#### Symptoms
-| Symptom                       | Meaning          |
-| ----------------------------- | ---------------- |
-| **Confusion**                 | 0 = No, 1 = Yes. |
-| **Disorientation**            | 0 = No, 1 = Yes. |
-| **PersonalityChanges**        | 0 = No, 1 = Yes. |
-| **DifficultyCompletingTasks** | 0 = No, 1 = Yes. |
-| **Forgetfulness**             | 0 = No, 1 = Yes. |
+### **3. Medical History**
+- Hypertension, cardiovascular disease, diabetes, depression, traumatic brain injury, family history
 
-#### Diagnosis Information
-| Feature       | Description                                                                |
-| ------------- | -------------------------------------------------------------------------- |
-| **Diagnosis** | Alzheimer’s diagnosis (0 = No, 1 = Yes). This is the model’s target label. |
+### **4. Cognitive & Functional Assessments**
+- MMSE (Mini-Mental State Examination)
+- Activities of Daily Living (ADL)
+- Functional Assessment (FA)
+- Behavioral and memory complaints
+
+### **5. Cognitive Game Metrics**
+Quantitative scores from four designed mini-games:
+- Memory Sequence Recall
+- Pattern Completion
+- Reaction Time Test
+- Task Switching
+
+**Class distribution:**  
+- 65% Healthy (n = 1,397)  
+- 35% Alzheimer’s (n = 753)
+
+Dataset had **no missing values**, no duplicates, and minimal multicollinearity.
+
+---
+
+## 🧠 High-Level Approach & Methods
+
+### **1. Data Preprocessing**
+- Stratified 80:20 train-test split
+- Standard scaling for continuous features
+- Validation against out-of-range or invalid entries
+- Retained all 32 clinically-relevant features
+
+### **2. Exploratory Data Analysis**
+- Distribution analysis of age, lifestyle, and cognitive scores
+- Correlation heatmaps
+- Statistical validation: t-tests, chi-square tests
+- Top features identified: FA, ADL, MMSE, Memory Complaints, Behavioral Problems
+
+### **3. Model Development**
+Multiple models were developed and compared:
+
+#### ✔ Neural Network (PyTorch)
+- Architecture: 32–64–32–16–1  
+- Accuracy: **84.65%**
+
+#### ✔ Random Forest
+- Tuned with GridSearchCV  
+- Accuracy: **94.42%**
+
+#### ✔ **XGBoost (Final Production Model)**
+- Extensive hyperparameter optimization
+- Best overall performance & compact size (1.2 MB)
+
+### **4. Model Interpretability**
+- Global feature importance (XGBoost & Random Forest)
+- SHAP values integrated into UI for patient-level explanations
+
+### **5. Production Deployment**
+- Built using **Streamlit**
+- Includes:
+  - Input validation
+  - Real-time probability output
+  - Risk tier mapping (Very Low → Very High)
+  - SHAP interpretability
+
+---
+
+## ⭐ Summary of Results
+
+### **Final Model: XGBoost Classifier**
+| Metric | Score |
+|--------|--------|
+| **Accuracy** | 95.12% |
+| **ROC-AUC** | 94.34% |
+| **Precision** | 94.56% |
+| **Recall (Sensitivity)** | 91.45% |
+| **Specificity** | 95.7% |
+| **F1 Score** | 92.98% |
+
+### **Key Findings**
+- Cognitive & functional assessments dominate predictive power (≈66% contribution).
+- Lifestyle factors add value through second-order interactions.
+- Model has a **very low false-negative rate**, essential for medical screening.
+- Production model runs at **~20,000 samples/sec** on standard CPU and is highly scalable.
+
+### **Clinical Relevance**
+- Provides a fast, low-cost screening tool for early detection.
+- Enhances decision-making with interpretable SHAP explanations.
+- Deployable in resource-limited clinical settings.
+
+---
 
 ## UI Samples
 ![alt text](./images/image.png)
